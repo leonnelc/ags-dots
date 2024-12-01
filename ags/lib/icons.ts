@@ -72,17 +72,6 @@ export default {
         "power-saver": "power-profile-power-saver-symbolic",
         performance: "power-profile-performance-symbolic",
     },
-    asusctl: {
-        profile: {
-            Balanced: "power-profile-balanced-symbolic",
-            Quiet: "power-profile-power-saver-symbolic",
-            Performance: "power-profile-performance-symbolic",
-        },
-        mode: {
-            Integrated: "processor-symbolic",
-            Hybrid: "controller-symbolic",
-        },
-    },
     battery: {
         charging: "battery-flash-symbolic",
         warning: "battery-empty-symbolic",
@@ -106,7 +95,7 @@ export default {
         recording: "media-record-symbolic",
     },
     notifications: {
-        noisy: "org.gnome.Settings-notifications-symbolic",
+        noisy: "notification-symbolic",
         silent: "notifications-disabled-symbolic",
         message: "chat-bubbles-symbolic",
     },
@@ -131,8 +120,9 @@ export default {
         next: "media-skip-forward-symbolic",
     },
     system: {
-        cpu: "org.gnome.SystemMonitor-symbolic",
-        ram: "drive-harddisk-solidstate-symbolic",
+        cpu: "processor-symbolic",
+        gpu: "expansion-card-symbolic",
+        ram: "memory-symbolic",
         temp: "temperature-symbolic",
     },
     color: {
