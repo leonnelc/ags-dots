@@ -4,6 +4,8 @@ import GLib from "gi://GLib"
 // const intval = options.system.fetchInterval.value
 // const tempPath = options.system.temperature.value
 
+export const barVisible = Variable(true);
+
 export const clock = Variable(GLib.DateTime.new_now_local(), {
     poll: [1000, () => GLib.DateTime.new_now_local()],
 })
