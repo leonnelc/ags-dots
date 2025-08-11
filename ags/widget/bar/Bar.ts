@@ -1,4 +1,6 @@
 import BatteryBar from "./buttons/BatteryBar";
+import CpuIndicator from "./buttons/CpuIndicator";
+import MemoryIndicator from "./buttons/MemoryIndicator";
 import ColorPicker from "./buttons/ColorPicker";
 import Date from "./buttons/Date";
 import Launcher from "./buttons/Launcher";
@@ -20,6 +22,8 @@ export type BarWidget = keyof typeof widget;
 
 const widget = {
   battery: BatteryBar,
+  cpu: CpuIndicator,
+  memory: MemoryIndicator,
   colorpicker: ColorPicker,
   date: Date,
   launcher: Launcher,
