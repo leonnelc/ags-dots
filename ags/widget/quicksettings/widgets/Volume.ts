@@ -2,6 +2,8 @@ import { type Stream } from "types/service/audio"
 import { Arrow, Menu } from "../ToggleButton"
 import { dependencies, icon, sh } from "lib/utils"
 import icons from "lib/icons.js"
+import { playSoundEffectSync } from "lib/sfx"
+
 const audio = await Service.import("audio")
 
 type Type = "microphone" | "speaker"
@@ -11,24 +13,33 @@ const VolumeIndicator = (type: Type = "speaker") => Widget.Button({
     on_clicked: () => audio[type].is_muted = !audio[type].is_muted,
     child: Widget.Icon({
         icon: audio[type].bind("icon_name")
-            .as(i => icon(i || "", icons.audio.mic.high)),
-        tooltipText: audio[type].bind("volume")
-            .as(vol => `Volume: ${Math.floor(vol * 100)}%`),
-    }),
+            .as(i => icon(i || "", icons.audio.type.speaker)),
+    tooltipText: audio[type].bind("is_muted").as( (v) => v ? `Unmute ${type}` : `Mute ${type}`)
+            }),
 })
 
-const VolumeSlider = (type: Type = "speaker") => Widget.Slider({
-    hexpand: true,
-    draw_value: false,
-    on_change: ({ value, dragging }) => {
-        if (dragging) {
-            audio[type].volume = value
-            audio[type].is_muted = false
-        }
-    },
-    value: audio[type].bind("volume"),
-    class_name: audio[type].bind("is_muted").as(m => m ? "muted" : ""),
-})
+const VolumeSlider = (type: Type = "speaker") => {
+    let dragTimeout: ReturnType<typeof setTimeout>;
+
+    return Widget.Slider({
+        hexpand: true,
+        draw_value: false,
+        tooltipText: audio[type].bind("volume").as(vol => `Volume: ${Math.round(vol * 100)}%`),
+        on_change: ({ value, dragging }) => {
+            if (dragTimeout) {
+                clearTimeout(dragTimeout)
+            }
+            if (dragging) {
+                audio[type].volume = value
+                audio[type].is_muted = false
+                dragTimeout = setTimeout(() => playSoundEffectSync("audio-volume-change"), 150)
+            }
+            
+        },
+        value: audio[type].bind("volume"),
+        max: 1.5,
+        class_name: audio[type].bind("is_muted").as(m => m ? "muted" : ""),
+})}
 
 export const Volume = () => Widget.Box({
     class_name: "volume",
@@ -37,6 +48,7 @@ export const Volume = () => Widget.Box({
         VolumeSlider("speaker"),
         Widget.Box({
             vpack: "center",
+            tooltipText: "Select sink",
             child: Arrow("sink-selector"),
         }),
         Widget.Box({

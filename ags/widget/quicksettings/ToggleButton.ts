@@ -40,6 +40,7 @@ type ArrowToggleButtonProps = {
     name: string
     icon: IconProps["icon"]
     label: LabelProps["label"]
+    tooltipText?: string,
     activate: () => void
     deactivate: () => void
     activateOnArrow?: boolean
@@ -49,6 +50,7 @@ export const ArrowToggleButton = ({
     name,
     icon,
     label,
+    tooltipText,
     activate,
     deactivate,
     activateOnArrow = true,
@@ -58,6 +60,8 @@ export const ArrowToggleButton = ({
     setup: self => self.hook(service, () => {
         self.toggleClassName("active", condition())
     }),
+    tooltipText: tooltipText ?? "",
+    hasTooltip: !!tooltipText,
     children: [
         Widget.Button({
             child: Widget.Box({
