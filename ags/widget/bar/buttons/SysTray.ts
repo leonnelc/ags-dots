@@ -10,24 +10,8 @@ const SysTrayItem = (item: TrayItem) => PanelButton({
     class_name: "tray-item",
     child: Widget.Icon({ icon: item.bind("icon") }),
     tooltip_markup: item.bind("tooltip_markup"),
-    setup: self => {
-        const { menu } = item
-        if (!menu)
-            return
 
-        const id = menu.connect("popped-up", () => {
-            self.toggleClassName("active")
-            menu.connect("notify::visible", () => {
-                self.toggleClassName("active", menu.visible)
-            })
-            menu.disconnect(id!)
-        })
-
-        self.connect("destroy", () => menu.disconnect(id))
-    },
-
-    on_primary_click: btn => item.menu?.popup_at_widget(
-        btn, Gdk.Gravity.SOUTH, Gdk.Gravity.NORTH, null),
+    on_primary_click: (_, event) => item.activate(event),
 
     on_secondary_click: btn => item.menu?.popup_at_widget(
         btn, Gdk.Gravity.SOUTH, Gdk.Gravity.NORTH, null),

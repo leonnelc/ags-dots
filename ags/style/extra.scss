@@ -19,28 +19,36 @@ window.popup {
     >* {
         border: none;
         box-shadow: none;
+        background-color: transparent;
     }
 
     menu {
-        border-radius: $popover-radius;
+        border-radius: $popover-radius*0.5;
         background-color: $bg;
-        padding: $popover-padding;
-        border: $border-width solid $popover-border-color;
+        padding: 0px;
 
         separator {
-            background-color: $border-color;
+            margin: 0;
         }
 
         menuitem {
             @include button;
-            padding: $spacing * .5;
-            margin: ($spacing * .5) 0;
+            padding: $spacing * .2;
+            padding-left: $spacing * 0.4;
+            margin: ($spacing * .0) 0px;
+            border-radius: 0;
+            background-color: $bg;
+            border-color: $border-color;
 
             &:first-child {
+                border-top-right-radius: $popover-radius*0.5;
+                border-top-left-radius: $popover-radius*0.5;
                 margin-top: 0;
             }
 
             &:last-child {
+                border-bottom-right-radius: $popover-radius*0.5;
+                border-bottom-left-radius: $popover-radius*0.5;
                 margin-bottom: 0;
             }
         }
