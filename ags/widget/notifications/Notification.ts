@@ -121,9 +121,9 @@ export default (notification: Notification) => {
         },
         on_hover_lost() {
             if (actionsbox)
-                actionsbox.reveal_child = true
-
-            notification.dismiss()
+                actionsbox.reveal_child = false
+            // TODO: make it configurable instead of disabling it
+            // notification.dismiss()
         },
         child: Widget.Box({
             vertical: true,

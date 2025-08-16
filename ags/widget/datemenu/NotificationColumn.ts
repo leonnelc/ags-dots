@@ -51,24 +51,36 @@ const NotificationList = () => {
 
     function remove(_: unknown, id: number) {
         const n = map.get(id)
-        if (n) {
-            n.reveal_child = false
-            Utils.timeout(options.transition.value, () => {
-                n.destroy()
-                map.delete(id)
-            })
-        }
+        if (!n) return;
+        n.reveal_child = false
+        Utils.timeout(options.transition.value, () => {
+            n.destroy()
+            map.delete(id)
+        })
+    }
+    function isTransient(n: ReturnType<typeof notifications.getNotification>) {
+      if (!n) return false;
+      return n.transient || (n.hints["transient"]?.deepUnpack() ?? false)
     }
 
     return box
         .hook(notifications, remove, "closed")
+        .hook(notifications, (_, id:number) => {
+          if (id == undefined) return;
+          const n = notifications.getNotification(id);
+          if (n && isTransient(n)) {
+            n.close();
+          }
+        }, "dismissed")
         .hook(notifications, (_, id: number) => {
             if (id !== undefined) {
                 if (map.has(id))
                     remove(null, id)
 
-                const n = notifications.getNotification(id)!
-
+                const n = notifications.getNotification(id)
+                if (!n || isTransient(n)) {
+                  return;
+                }
                 const w = Animated(n)
                 map.set(id, w)
                 box.children = [w, ...box.children]

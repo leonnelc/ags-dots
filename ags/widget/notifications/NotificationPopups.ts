@@ -5,7 +5,7 @@ const notifications = await Service.import("notifications")
 const { transition } = options
 const { position } = options.notifications
 const { timeout, idle } = Utils
-
+import { playSoundEffect, SoundEffect } from "lib/sfx"
 function Animated(id: number) {
     const n = notifications.getNotification(id)!
     const widget = Notification(n)
@@ -63,15 +63,31 @@ function PopupList() {
     return box
         .hook(notifications, (_, id: number) => {
             if (id !== undefined) {
-                if (map.has(id))
-                    remove(null, id)
+                if (map.has(id)) remove(null, id)
 
-                if (notifications.dnd)
-                    return
-
+                const notification = notifications.getNotification(id)
+                if (notifications.dnd) return;
                 const w = Animated(id)
                 map.set(id, w)
                 box.children = [w, ...box.children]
+                const suppressSound = notification?.hints["suppress-sound"]?.deepUnpack() ?? false
+                const customSound = notification?.hints["sound-name"]?.deepUnpack() ?? false
+                if (customSound) {
+                    return playSoundEffect(customSound as SoundEffect);
+                }
+                if (suppressSound) {
+                    return;
+                }
+                switch (notification?.urgency) {
+                  case "critical":
+                    playSoundEffect("dialog-warning");
+                    break;
+                  case "low":
+                    break;
+                  default:
+                    playSoundEffect("dialog-information");
+                    break;
+                }
             }
         }, "notified")
         .hook(notifications, remove, "dismissed")
