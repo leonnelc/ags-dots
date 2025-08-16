@@ -202,24 +202,6 @@ $button-radius: $radius;
 
         }
 
-        @for $i from 1 through $bar-battery-blocks {
-            block:nth-child(#{$i}).filled {
-                background-color: color.mix($bg, $primary-bg, $i*3)
-            }
-
-            &.low block:nth-child(#{$i}).filled {
-                background-color: color.mix($bg, $error-bg, $i*3)
-            }
-
-            &.charging block:nth-child(#{$i}).filled {
-                background-color: color.mix($bg, $charging-bg, $i*3)
-            }
-
-            &:active .regular block:nth-child(#{$i}).filled {
-                background-color: color.mix($bg, $primary-fg, $i*3)
-            }
-        }
-
         &.low image {
             color: $error-bg
         }
@@ -230,6 +212,39 @@ $button-radius: $radius;
 
         &:active image {
             color: $primary-fg
+        }
+    }
+    .cpu-button >box , .memory-button >box {
+        margin-top: 0px;
+        margin-bottom: 0px;
+        padding-top: 0px;
+        padding-bottom: 0px;
+      
+    }
+    .circular-progress {
+        background-color: #332f2f;
+        min-width: 20px;  // its size is min(min-height, min-width)
+        font-size: 2px; // to set its thickness set font-size on it
+        margin: 2px; // you can set margin on it
+        margin-top: 0px;
+        margin-bottom: 0px;
+        padding-top: 0px;
+        padding-bottom: 0px;
+    }
+    .cpu-button {
+      .cpu-progress {
+        color: #00a0ff;
+      }
+      &.high .cpu-progress {
+        color: $error-bg
+      }
+      &.low .cpu-progress {
+        color: #FFBF00
+      }
+    }
+    .memory-button {
+        .memory-progress {
+            color: #009d71;
         }
     }
 }

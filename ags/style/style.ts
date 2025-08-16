@@ -75,7 +75,6 @@ const variables = () => [
 
     // etc
     $("charging-bg", options.bar.battery.charging),
-    $("bar-battery-blocks", options.bar.battery.blocks),
     $("bar-position", options.bar.position),
 ]
 

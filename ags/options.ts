@@ -4,7 +4,7 @@ import { icon } from "lib/utils"
 import icons from "lib/icons"
 
 const options = mkOptions(OPTIONS, {
-    autotheme: opt(false),
+    autotheme: opt(true),
 
     wallpaper: {
         resolution: opt<import("service/wallpaper").Resolution>(1920),
@@ -49,41 +49,38 @@ const options = mkOptions(OPTIONS, {
             opacity: opt(96),
         },
 
-        shadows: opt(true),
+        shadows: opt(false),
         padding: opt(7),
         spacing: opt(12),
-        radius: opt(11),
+        radius: opt(25),
     },
 
     transition: opt(200),
 
     font: {
-        size: opt(13),
+        size: opt(14),
         name: opt("Ubuntu Nerd Font"),
     },
 
     bar: {
         flatButtons: opt(true),
         position: opt<"top" | "bottom">("top"),
-        corners: opt(50),
-        transparent: opt(false),
+        transparent: opt(true),
         layout: {
             start: opt<Array<import("widget/bar/Bar").BarWidget>>([
                 "launcher",
                 "workspaces",
-                "taskbar",
+                "cpu",
+                "memory",
                 "expander",
-                "messages",
             ]),
             center: opt<Array<import("widget/bar/Bar").BarWidget>>([
                 "date",
             ]),
             end: opt<Array<import("widget/bar/Bar").BarWidget>>([
-                "media",
                 "expander",
                 "systray",
                 "colorpicker",
-                "screenrecord",
                 "system",
                 "battery",
                 "powermenu",
@@ -96,7 +93,7 @@ const options = mkOptions(OPTIONS, {
             },
             label: {
                 colored: opt(false),
-                label: opt(" Applications"),
+                label: opt(""),
             },
             action: opt(() => App.toggleWindow("launcher")),
         },
@@ -105,29 +102,26 @@ const options = mkOptions(OPTIONS, {
             action: opt(() => App.toggleWindow("datemenu")),
         },
         battery: {
-            bar: opt<"hidden" | "regular" | "whole">("regular"),
+            bar: opt<"hidden" | "regular">("hidden"),
             charging: opt("#00D787"),
-            percentage: opt(true),
-            blocks: opt(7),
-            width: opt(50),
-            low: opt(30),
+            showPercentage: opt(true),
+            enableBatteryControl: opt(true),
+            low: opt(20),
+            veryLow: opt(10),
         },
         workspaces: {
-            workspaces: opt(7),
+            workspaces: opt(0),
         },
         taskbar: {
             iconSize: opt(0),
-            monochrome: opt(true),
+            monochrome: opt(false),
             exclusive: opt(false),
         },
         messages: {
             action: opt(() => App.toggleWindow("datemenu")),
         },
         systray: {
-            ignore: opt([
-                "KDE Connect Indicator",
-                "spotify-client",
-            ]),
+            ignore: opt([]),
         },
         media: {
             monochrome: opt(true),
@@ -149,13 +143,14 @@ const options = mkOptions(OPTIONS, {
             max: opt(16),
         },
         apps: {
-            iconSize: opt(62),
+            iconSize: opt(48),
             max: opt(6),
             favorites: opt([
                 [
                     "firefox",
-                    "wezterm",
-                    "org.gnome.Nautilus",
+                    "chromium",
+                    "brave-nightly",
+                    "foot",
                     "org.gnome.Calendar",
                     "spotify",
                 ],
@@ -165,8 +160,8 @@ const options = mkOptions(OPTIONS, {
 
     overview: {
         scale: opt(9),
-        workspaces: opt(7),
-        monochromeIcon: opt(true),
+        workspaces: opt(0),
+        monochromeIcon: opt(false),
     },
 
     powermenu: {
@@ -174,6 +169,7 @@ const options = mkOptions(OPTIONS, {
         reboot: opt("systemctl reboot"),
         logout: opt("pkill Hyprland"),
         shutdown: opt("shutdown now"),
+        lock: opt("hyprlock"),
         layout: opt<"line" | "box">("line"),
         labels: opt(true),
     },
@@ -185,7 +181,6 @@ const options = mkOptions(OPTIONS, {
         },
         width: opt(380),
         position: opt<"left" | "center" | "right">("right"),
-        networkSettings: opt("gtk-launch gnome-control-center"),
         media: {
             monochromeIcon: opt(true),
             coverSize: opt(100),
@@ -211,7 +206,7 @@ const options = mkOptions(OPTIONS, {
             vertical: opt(true),
             pack: {
                 h: opt<"start" | "center" | "end">("end"),
-                v: opt<"start" | "center" | "end">("center"),
+                v: opt<"start" | "center" | "end">("end"),
             },
         },
         microphone: {
@@ -226,12 +221,6 @@ const options = mkOptions(OPTIONS, {
         position: opt<Array<"top" | "bottom" | "left" | "right">>(["top", "right"]),
         blacklist: opt(["Spotify"]),
         width: opt(440),
-    },
-
-    hyprland: {
-        gaps: opt(2.4),
-        inactiveBorder: opt("#282828"),
-        gapsWhenOnly: opt(false),
     },
 })
 
