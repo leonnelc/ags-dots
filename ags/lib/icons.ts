@@ -35,10 +35,10 @@ export default {
         settings: "emblem-system-symbolic",
         themes: "preferences-desktop-theme-symbolic",
         tick: "object-select-symbolic",
-        time: "hourglass-symbolic",
+        time: "clock-symbolic",
         toolbars: "toolbars-symbolic",
         warning: "dialog-warning-symbolic",
-        avatar: "avatar-default-symbolic",
+        avatar: "avatar-default",
         arrow: {
             right: "pan-end-symbolic",
             left: "pan-start-symbolic",
@@ -74,7 +74,9 @@ export default {
     },
     battery: {
         charging: "battery-flash-symbolic",
-        warning: "battery-empty-symbolic",
+        warning: "battery-level-10-symbolic",
+        charged: "battery-charged",
+        critical: "battery-caution-symbolic",
     },
     bluetooth: {
         enabled: "bluetooth-active-symbolic",
@@ -89,13 +91,14 @@ export default {
         sleep: "weather-clear-night-symbolic",
         reboot: "system-reboot-symbolic",
         logout: "system-log-out-symbolic",
+        lock: "system-lock-screen-symbolic",
         shutdown: "system-shutdown-symbolic",
     },
     recorder: {
         recording: "media-record-symbolic",
     },
     notifications: {
-        noisy: "notification-symbolic",
+        noisy: "preferences-system-notifications-symbolic",
         silent: "notifications-disabled-symbolic",
         message: "chat-bubbles-symbolic",
     },
