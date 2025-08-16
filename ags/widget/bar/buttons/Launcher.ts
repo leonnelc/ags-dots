@@ -6,9 +6,8 @@ const { icon, label, action } = options.bar.launcher
 function Spinner() {
     const child = Widget.Icon({
         icon: icon.icon.bind(),
-        class_name: Utils.merge([
-            icon.colored.bind(),
-        ], (c, r) => `${c ? "colored" : ""} ${r ? "" : "spinning"}`),
+        class_name: 
+            icon.colored.bind().as(c => `${c ? "colored" : ""}`),
         css: `
             @keyframes spin {
                 to { -gtk-icon-transform: rotate(1turn); }
@@ -26,9 +25,7 @@ function Spinner() {
     return Widget.Revealer({
         transition: "slide_left",
         child,
-        reveal_child: Utils.merge([
-            icon.icon.bind(),
-        ], (i, r) => Boolean(i || r)),
+        reveal_child: icon.icon.bind().as(i => Boolean(i)),
     })
 }
 
