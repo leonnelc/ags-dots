@@ -3,6 +3,7 @@ import GLib from "gi://GLib"
 const main = "/tmp/asztal/main.js"
 const entry = `${App.configDir}/main.ts`
 const bundler = GLib.getenv("AGS_BUNDLER") || "bun"
+console.log(`App.configDir=${App.configDir}`)
 
 const v = {
     ags: pkg.version?.split(".").map(Number) || [],
@@ -31,8 +32,11 @@ try {
         default:
             throw `"${bundler}" is not a valid bundler`
     }
-
-    if (v.ags[1] < v.expect[1] || v.ags[2] < v.expect[2]) {
+    if (v.ags[0] > 1) {
+      print(`This config doesn't work with ags version 2 or newer`);
+      App.quit()
+    }
+    if (v.ags[1] < v.expect[1] || (v.ags[1] == v.expect[1] && v.ags[2] < v.expect[2])) {
         print(`my config needs at least v${v.expect.join(".")}, yours is v${v.ags.join(".")}`)
         App.quit()
     }
