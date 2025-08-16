@@ -1,13 +1,14 @@
 import { Menu, ArrowToggleButton } from "../ToggleButton"
 import icons from "lib/icons.js"
-import { dependencies, sh } from "lib/utils"
-import options from "options"
+import { dependencies } from "lib/utils"
 const { wifi } = await Service.import("network")
+import { passwordPopupLabel, passwordPopupCallback } from "widget/wifi/PasswordPopup"
 
 export const NetworkToggle = () => ArrowToggleButton({
     name: "network",
     icon: wifi.bind("icon_name"),
-    label: wifi.bind("ssid").as(ssid => ssid || "Not Connected"),
+    label: wifi.bind("ssid").as(ssid => `${ssid}` || "Not Connected"),
+    tooltipText: wifi.bind("ssid").as(ssid => `${ssid}` || "Not connected"),
     connection: [wifi, () => wifi.enabled],
     deactivate: () => wifi.enabled = false,
     activate: () => {
@@ -29,8 +30,13 @@ export const WifiSelection = () => Menu({
                     .slice(0, 10)
                     .map(ap => Widget.Button({
                         on_clicked: () => {
+                            passwordPopupLabel.setValue(`Enter password for ${ap.ssid}`)
+                            passwordPopupCallback.fn = (password) => {
+                              Utils.execAsync(`nmcli device wifi connect ${ap.bssid} password "${password}"`)
+                              // TODO: connect using nmcli c up ssid if the password is already set (check using nmcli c show)
+                            }
                             if (dependencies("nmcli"))
-                                Utils.execAsync(`nmcli device wifi connect ${ap.bssid}`)
+                                App.openWindow("passwordPopup");
                         },
                         child: Widget.Box({
                             children: [
@@ -41,7 +47,7 @@ export const WifiSelection = () => Menu({
                                     hexpand: true,
                                     hpack: "end",
                                     setup: self => Utils.idle(() => {
-                                        if (!self.is_destroyed)
+                                        if (!self.is_destroyed) // TODO: add bookmark icon to saved networks
                                             self.visible = ap.active
                                     }),
                                 }),
@@ -52,7 +58,9 @@ export const WifiSelection = () => Menu({
         }),
         Widget.Separator(),
         Widget.Button({
-            on_clicked: () => sh(options.quicksettings.networkSettings.value),
+            on_clicked: () => {
+        //TODO: widget that shows connected network's settings
+            },
             child: Widget.Box({
                 children: [
                     Widget.Icon(icons.ui.settings),
